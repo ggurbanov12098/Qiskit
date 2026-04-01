@@ -1,0 +1,10 @@
+{
+  "enabledMcpjsonServers": [
+    "qiskit-mcp",
+    "qiskit-docs",
+    "qiskit-ibm-runtime",
+    "qiskit-ibm-transpiler",
+    "qiskit-code-assistant",
+    "qiskit-gym"
+  ]
+}

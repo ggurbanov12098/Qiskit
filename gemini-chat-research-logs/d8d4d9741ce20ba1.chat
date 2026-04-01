@@ -1,0 +1,301 @@
+The paper "Quantum_TermPaper_Gabil" was the first version of the master thesis, after that I wrote these two reports as a continuation of slightly different progress. Now I'm trying to address the Shor's and Grover's algorithm in QC in IBM's Qiskit platform. First of all, give me the summary of each paper, then list me what each paper lacks for master thesis report. After give me some advice on how I can address the issues and make the research paper more effective in a short period of time
+
+
+
+Here is a summary of the three documents, an analysis of the gaps in each regarding a complete master's thesis, and a strategic plan to finalize your research efficiently. 
+
+### Document Summaries
+
+**1. Quantum Cybersecurity: Threats and Risks (Term Paper)**
+* [cite_start]This paper provides a theoretical foundation, outlining how quantum computing threatens modern cryptographic systems[cite: 262].
+* [cite_start]It details how Shor's algorithm endangers asymmetric public-key systems (like RSA) through polynomial-time factorization, and how Grover's algorithm weakens symmetric-key systems by offering quadratic speedups in unstructured searches[cite: 263]. 
+* [cite_start]The paper compares Qiskit and Cirq, noting Qiskit's layered architecture and geographic access restrictions (e.g., in Azerbaijan due to Cloudflare), contrasting this with Cirq's hardware-focused design[cite: 310, 318, 342].
+* [cite_start]It breaks down the mathematical phases of both algorithms, such as Quantum Phase Estimation for Shor's and amplitude amplification for Grover's[cite: 350, 396, 476, 477].
+
+**2. Progress Report 1: Benchmarking Shor's Algorithm**
+* [cite_start]This report transitions from theory to practice, establishing a systematic benchmarking study of Shor's algorithm for $N=15$, $a=2$ on IBM's 156-qubit `ibm_marrakesh` hardware[cite: 128].
+* [cite_start]It introduces a three-tier execution framework: ideal noiseless simulation, noisy simulation using device-calibrated models, and real hardware execution[cite: 128].
+* [cite_start]The experiment tests 48 configurations across variables like transpilation optimization, control-register size, and dynamical decoupling[cite: 129].
+* [cite_start]Findings show a maximum hardware success probability of 88.4% with 4 control qubits at optimization level 2, while larger 8-qubit configurations degraded to near-random outputs due to hardware noise[cite: 131].
+
+**3. Progress Report 2: Data Analysis and Methodology**
+* [cite_start]This document deepens the data analysis of the 48 configurations, formally establishing the three-tier framework as the baseline computational model to quantify the "theory-practice gap"[cite: 7, 84].
+* [cite_start]It identifies circuit depth and transpilation optimization as the two most dominant factors governing execution fidelity[cite: 8].
+* [cite_start]The report notes a precision-noise trade-off: the theoretical precision gained by adding control qubits is currently overwhelmed by noise accumulation on NISQ devices[cite: 65].
+* [cite_start]Future steps are proposed, including zero-noise extrapolation (ZNE), probabilistic error cancellation (PEC), and factor extraction via continued fractions[cite: 106].
+
+---
+
+### Gap Analysis: What is Lacking for a Master's Thesis
+
+To form a cohesive master's thesis, the current documents have a few disjointed elements:
+
+* **The Term Paper** lacks empirical data. It is an excellent literature review and theoretical framing, but it contains no original experimental results.
+* **Report 1 and Report 2** completely drop Grover's algorithm. While the term paper extensively discusses the dual threat of Shor's (asymmetric) and Grover's (symmetric), the empirical benchmarking is exclusively focused on Shor's algorithm. 
+* **The Progress Reports** lose the broader cybersecurity narrative. They become highly focused on quantum circuit optimization (Total Variation Distance, transpilation metrics) and do not thoroughly connect these hardware limitations back to the cryptographic threat timelines discussed in the term paper.
+
+---
+
+### Strategic Advice for Finalizing the Thesis
+
+Given the fast-approaching defense timeline, the most efficient path is to integrate your existing work while running a scaled-down experiment to cover the missing components. 
+
+**1. Merge and Restructure**
+Use the Term Paper as your Introduction and Literature Review. It effectively sets the stakes (the threat to RSA and AES). Use Reports 1 and 2 as your Methodology and Results chapters for the Shor's algorithm component. 
+
+**2. Execute a "Fast" Grover's Experiment**
+To fulfill the promise of addressing both algorithms without derailing your timeline, implement a small-scale Grover's search in Qiskit (e.g., a 2-qubit or 3-qubit circuit searching for a single marked item). 
+* **Reuse Your Framework:** Run this Grover's circuit through the exact same 48-configuration sweep and three-tier framework (Ideal, Noisy, Hardware) you already built for Shor's algorithm.
+* **Leverage Local Compute:** To save time on the noisy simulations before queuing on IBM's cloud, run the Qiskit Aer device-calibrated models locally on your MacBook's M4 Pro chip. 
+* **Manage Access:** Ensure your VPN routing is stable to bypass the Cloudflare/regional restrictions previously encountered when interacting with IBM Quantum services.
+
+**3. Synthesize the Findings (The "Theory-Practice Gap")**
+In your discussion chapter, compare how NISQ hardware noise impacts the two algorithms differently. For example, does the Quantum Fourier Transform in Shor's algorithm degrade faster under hardware noise than the Oracle/Diffusion operator in Grover's algorithm? 
+
+**4. Frame the Hardware Limits as a Cybersecurity Finding**
+Tie the empirical results back to the cybersecurity narrative. The fact that an 8-qubit control register degrades to near-random output (as found in Report 1) is empirical proof that the cryptographic threat timeline is currently bottlenecked by qubit coherence, not just qubit count. 
+
+Would you like me to help draft the Qiskit code for the 2-qubit Grover's circuit so you can immediately plug it into your existing benchmarking framework?
+
+
+
+
+
+
+
+
+
+I want you to find papers on the described/highly related to the topic above that would help me to progress with my research.
+
+Before I ask anything, do this:
+- ﻿﻿﻿List every paper by author + year + core claim in one sentence if possible mark the ones that are available to read free, majorly focus on these but quality shouldn't be harmed)
+- ﻿﻿﻿Group them into clusters of shared assumptions
+- ﻿﻿﻿Flag any paper that contradicts another
+
+Map the landscape.
+
+
+
+
+
+
+
+
+Here is a comprehensive literature map of recent, highly relevant research (ranging from late 2024 to early 2026) that perfectly aligns with benchmarking Shor’s and Grover’s algorithms on NISQ devices and analyzing the resulting cybersecurity implications. 
+
+### The Literature Landscape
+
+**1. Practical Challenges in Executing Shor's Algorithm on Existing Quantum Platforms** *(arXiv: 2512.15330, Dec 2025)* **[Free Access]**
+* **Core Claim:** Experimental execution of Shor's algorithm on cloud-based quantum hardware reveals a substantial gap between current NISQ capabilities and the requirements for factoring cryptographically relevant integers due to circuit depth and two-qubit error accumulation.
+
+**2. Investigation of Hardware Architecture Effects on Quantum Algorithm Performance: A Comparative Study** *(arXiv: 2601.05286, Jan 2026)* **[Free Access]**
+* **Core Claim:** Benchmarking algorithms like Grover's and QFT across superconducting (like IBM/Rigetti) and trapped-ion backends demonstrates that algorithmic fidelity is heavily dependent on hardware topology, native connectivity, and routing overhead.
+
+**3. GRADE: Grover-based Benchmarking Toolkit for Assessing Quantum Hardware** *(arXiv: 2504.19387, Apr 2025)* **[Free Access]**
+* **Core Claim:** Grover's algorithm serves as an ideal benchmarking toolkit to evaluate hardware accuracy and stability precisely because its deep circuits are highly sensitive to the noise and architectural imperfections defining the NISQ era.
+
+**4. Iterative Matrix Product State Simulation for Scalable Grover's Algorithm** *(arXiv: 2601.03832, Jan 2026)* **[Free Access]**
+* **Core Claim:** An iterative Matrix Product State (MPS) framework enables scalable, memory-efficient classical simulation of Grover's algorithm, significantly outperforming standard state-vector backends and allowing for large-scale baseline validations.
+
+**5. On the Importance of Error Mitigation for Quantum Computation** *(arXiv: 2503.17243, Mar 2025)* **[Free Access]**
+* **Core Claim:** Error mitigation (EM) techniques will be the primary method enabling "finite quantum advantage" for finite algorithms in the near term, serving as a critical bridge before fully fault-tolerant error correction is achieved.
+
+**6. Benchmarking Quantum Computers** *(arXiv: 2407.08828, Jul 2024)* **[Free Access]**
+* **Core Claim:** Good benchmarks are critical for measuring the path to quantum utility, emphasizing that because current quantum logic operations fail at rates of 0.01%-1%, aggressive error reduction and customized compilation are mandatory.
+
+**7. Securing Cryptography in the Age of Quantum Computing and AI: Threats and Strategic Response** *(arXiv: 2603.06969, Mar 2026)* **[Free Access]**
+* **Core Claim:** Recent hardware milestones (e.g., Google's Willow) and algorithmic improvements (reducing RSA-2048 physical qubit requirements by 95%) have significantly shortened the timeline for cryptographically relevant quantum threats.
+
+**8. Enterprise Migration to Post-Quantum Cryptography: Timeline Analysis** *(MDPI, 2025)* **[Free Access]**
+* **Core Claim:** Realistic enterprise migration to post-quantum cryptography will take up to 15 years, a timeline that is dangerously tight when contextualized against the projected arrival of fault-tolerant quantum computers between 2028 and 2033.
+
+---
+
+### Clusters of Shared Assumptions
+
+* **Cluster 1: The NISQ Hardware Bottleneck (The "Theory-Practice Gap")**
+    * *Papers:* 1, 2, 3, 6
+    * *Assumption:* While algorithms like Shor's and Grover's are mathematically sound, their practical execution on current hardware is currently crushed by gate errors and transpilation overhead. The physical topology of the chip (e.g., heavy-hex vs. all-to-all connectivity) dictates the survival probability of the circuit.
+* **Cluster 2: Baseline Validation & The Mitigation Bridge**
+    * *Papers:* 4, 5
+    * *Assumption:* Because hardware is noisy, we must rely heavily on advanced classical simulators (like MPS) to establish the "ideal" baseline, and aggressive Error Mitigation (EM) to extract any meaningful signal from the noise.
+* **Cluster 3: The Accelerated Cryptographic Threat**
+    * *Papers:* 7, 8
+    * *Assumption:* The timeline for breaking RSA/AES is shrinking. The threat is no longer a distant theoretical physics problem, but an active software and systems engineering race toward Post-Quantum Cryptography (PQC).
+
+---
+
+### The Friction Points (Contradictions)
+
+* **Contradiction 1: Hardware Reality vs. Algorithmic Optimism (The Threat Timeline)**
+    * *The Pessimistic View (Paper 1):* Running Shor's on actual hardware shows that even factoring small, toy numbers results in rapid fidelity degradation. From a pure hardware execution standpoint, breaking RSA feels very far away.
+    * *The Urgent View (Paper 7):* The threat is actually imminent because algorithmic breakthroughs have slashed the physical qubit requirement for RSA-2048 by 95%. We don't need to wait for a 20-million-qubit machine anymore; a 1-million-qubit machine will suffice, drastically shifting the timeline.
+* **Contradiction 2: Error Mitigation (EM) vs. Error Correction (EC)**
+    * *EM First (Paper 5):* Argues that Error Mitigation will be the sole driver of quantum utility in the near future, long before fault tolerance is viable.
+    * *FTQC Leapfrog (Paper 7):* Highlights that recent hardware developments (like Google's Willow achieving below-threshold error correction) suggest the industry might scale Error Correction faster than anticipated, potentially shortening the era where pure EM is our only defense against noise.
+
+Would you like me to help draft a literature review section synthesizing these specific clusters to frame your research gap?
+
+
+
+
+
+
+
+
+
+Based on the literature landscape we just mapped, the three foundational concepts driving this research are **Shor's Algorithm & Cryptographic Threat**, **Grover's Algorithm & Amplitude Amplification**, and **The NISQ Era & Error Mitigation**. 
+
+Here is the intellectual lineage of these concepts, mapped out to show how the academic consensus has evolved from theoretical physics to practical hardware engineering.
+
+### Concept 1: Shor’s Algorithm & The Cryptographic Threat Timeline
+This concept centers on the polynomial-time quantum solution to integer factorization and discrete logarithms, which directly threatens RSA and Elliptic Curve Cryptography.
+
+* **🌱 The Origin (Introduced):** **Peter Shor (1994).** Shor proved mathematically that a quantum computer could factor large integers exponentially faster than classical computers, introducing the Quantum Fourier Transform (QFT) as the engine for finding the period of a modular function.
+* **⚡ The Challenge:** For decades, the challenge wasn't the math, but the staggering hardware overhead. Early estimates suggested it would require a billion physical qubits to run. Furthermore, researchers like **Oded Regev (2023)** recently challenged the fundamental depth of Shor's original circuit, proposing a multi-dimensional variation that requires fewer gates but more qubits.
+* **🛠️ The Refinement:** **Stephane Beauregard (2002)** optimized the circuit for a classical adder, reducing the qubit requirement to $2n+3$. Later, **Craig Gidney and Martin Ekerå (2019)** significantly refined the cost analysis, demonstrating how to factor 2048-bit RSA integers in 8 hours using 20 million noisy qubits. Recently, algorithmic improvements are driving these physical qubit estimates even lower.
+* **🎯 Current Consensus:** The algorithm is mathematically unassailable, but the timeline to "Q-Day" (when quantum computers break RSA) is strictly bottlenecked by hardware error correction. The consensus is that we are still years away from running it at scale, but the threat is credible enough that the transition to Post-Quantum Cryptography (PQC) must happen immediately.
+
+### Concept 2: Grover’s Algorithm & Amplitude Amplification
+This concept describes the method for finding a marked item in an unstructured database with a quadratic speedup over classical brute-force methods, posing a threat to symmetric encryption (like AES).
+
+* **🌱 The Origin (Introduced):** **Lov Grover (1996).** Grover introduced the diffusion operator (inversion about the mean) to amplify the probability of measuring a target state flagged by a quantum oracle.
+* **⚡ The Challenge:** **Christof Zalka (1999)** rigorously proved that Grover's quadratic speedup is strictly optimal—you cannot search an unstructured database faster than $O(\sqrt{N})$. More recently, researchers like **Ryan Babbush et al. (2021)** have challenged the *practical* utility of Grover's for database search, arguing that the massive overhead of quantum error correction might entirely wipe out the quadratic speedup in real-world scenarios.
+* **🛠️ The Refinement:** **Gilles Brassard et al. (1998)** generalized Grover's specific search into a broader framework called **Amplitude Amplification**, proving it could be applied to a wide range of heuristic algorithms beyond simple database searches. Modern researchers are now refining its use as a strict **benchmarking toolkit** because its deep, repetitive oracle calls are perfect for exposing hardware noise.
+* **🎯 Current Consensus:** While Grover's halves the effective bit-strength of symmetric keys (forcing the migration from AES-128 to AES-256), its true near-term value lies in benchmarking. It is exceptionally difficult to run deep Grover iterations on current hardware, making it the ultimate stress test for qubit coherence and gate fidelity.
+
+### Concept 3: The NISQ Era & Error Mitigation (EM)
+This concept deals with the reality of current hardware: we have quantum processors, but they are too noisy for deep circuits and too small for full Error Correction.
+
+* **🌱 The Origin (Introduced):** **John Preskill (2018)** coined the term "Noisy Intermediate-Scale Quantum" (NISQ) to describe the current era. The foundational techniques for Error Mitigation (like Zero-Noise Extrapolation and Probabilistic Error Cancellation) were introduced around 2017 by researchers like **Ying Li, Simon Benjamin, Kristan Temme, Sergey Bravyi, and Jay Gambetta**.
+* **⚡ The Challenge:** Many theorists challenged the viability of Error Mitigation. Papers over the last few years (e.g., from the Caltech quantum group) mathematically proved that the cost of Error Mitigation scales exponentially with the depth of the circuit. They argued that EM is a dead-end for deep algorithms like Shor's.
+* **🛠️ The Refinement:** **IBM Quantum (2023 - Kim et al.)** published a landmark paper in *Nature* demonstrating "quantum utility," proving that with aggressive error mitigation and device-calibrated noise models, NISQ devices could simulate complex physical systems beyond the reach of brute-force classical computation.
+* **🎯 Current Consensus:** Error Mitigation is recognized as a temporary, but entirely mandatory, bridge. EM can extract meaningful signals from noisy hardware for shallow circuits, but true Fault-Tolerant Quantum Computing (FTQC) requiring thousands of physical qubits to create one logical, error-free qubit is the only way to eventually execute deep cryptographic algorithms.
+
+---
+
+Would you like me to help you weave these intellectual lineages into a concise "Literature Review" outline for your thesis, ensuring it directly connects to your own empirical findings on IBM's hardware?
+
+
+
+
+
+
+
+
+
+
+
+Based on all uploaded papers, identify the 5 research questions that NOBODY has fully answered yet.
+
+For each gap:
+
+- Why does it exist? (too hard, too niche, overlooked?)
+- Which existing paper came closest to answering it?
+- What methodology would be needed to close it?
+
+
+
+
+
+
+
+
+
+
+Here are five specific research questions that remain unanswered within the scope of your uploaded documents, presenting excellent opportunities for further investigation.
+
+### 1. The Non-Markovian Error Impact on Deep Quantum Circuits
+* **The Gap:** Why do device-calibrated noise models fail to accurately predict hardware behavior for deep circuits?
+* [cite_start]**Why it exists (Too Hard):** Standard noise models operate on a Markovian assumption, meaning they treat errors as memoryless events[cite: 85]. [cite_start]Modeling non-Markovian noise (where error rates depend on the history of prior operations) and complex crosstalk requires tracking the entire system history, which is computationally intractable for standard simulators[cite: 85, 231].
+* [cite_start]**Closest Paper:** *Progress Report 2* (identifies the substantial Total Variation Distance gap—ranging from 0.127 to 0.870—between Noisy and Hardware tiers)[cite: 85].
+* **Methodology to Close It:** Develop custom noise models in Qiskit Aer that explicitly inject crosstalk and thermal drift parameters. Execute the 48-configuration suite against this advanced noise model and measure if the TVD gap between the simulation and the real `ibm_marrakesh` results narrows.
+
+### 2. Cross-Architecture Variability of Shor's Algorithm
+* **The Gap:** How does the physical topology and calibration cycle of different quantum processors affect the fidelity of Shor's algorithm?
+* [cite_start]**Why it exists (Resource-Constrained):** The current experiments were entirely restricted to a single backend (`ibm_marrakesh`) during a single session[cite: 234]. Accessing multiple premium, high-qubit-count IBM Quantum processors simultaneously to control for temporal drift is difficult.
+* [cite_start]**Closest Paper:** *Progress Report 1* (explicitly states the limitation of testing on a single backend and notes performance may vary across devices)[cite: 234].
+* [cite_start]**Methodology to Close It:** Execute the established three-tier execution framework [cite: 179] across multiple IBM processors with differing topologies (e.g., heavy-hex vs. eagle architecture). Compare the hardware success probabilities to determine if layout, rather than just qubit count, significantly dictates performance.
+
+### 3. The Counterproductive Interaction Between DD and Transpilation
+* **The Gap:** Why does Dynamical Decoupling (DD) actively degrade circuit fidelity at high transpilation optimization levels?
+* **Why it exists (Too Niche):** Error mitigation techniques are frequently treated as universally beneficial. [cite_start]The destructive interference between compiler-level optimization (which eliminates idle periods) and pulse-level protection (which inserts XpXm sequences into idle periods) is a highly specific edge case[cite: 68, 76, 196]. 
+* [cite_start]**Closest Paper:** *Progress Report 2* (flags this non-trivial interaction as the primary challenge encountered during the experiment)[cite: 104].
+* **Methodology to Close It:** Conduct a pulse-level analysis using Qiskit Pulse. [cite_start]Inspect the exact pulse schedules of the transpiled circuits at optimization level 3 [cite: 89] to see if the inserted DD sequences are extending gate times unnecessarily or causing unintended crosstalk when dense gate packing leaves no room for proper decoupling.
+
+### 4. Hardware-Level Empirical Benchmarking of Grover's Algorithm
+* **The Gap:** How does Grover's algorithm perform on NISQ devices compared to theoretical expectations?
+* [cite_start]**Why it exists (Too Hard):** The term paper outlines the massive threat Grover's algorithm poses to symmetric cryptography[cite: 263, 294, 364]. [cite_start]However, practical implementation requires a quantum oracle and a diffusion operator [cite: 367, 369] [cite_start]that create exceptionally deep circuits, making it difficult to maintain quantum coherence over many iterations on current NISQ hardware[cite: 375]. [cite_start]As a result, the empirical benchmarking was restricted entirely to Shor's algorithm[cite: 6, 128].
+* [cite_start]**Closest Paper:** *Quantum Cybersecurity: Threats and Risks* (details the theoretical phases, oracle application, and amplitude amplification of the algorithm)[cite: 368, 369, 476].
+* **Methodology to Close It:** Design a scaled-down 2-qubit or 3-qubit Grover's circuit. [cite_start]Run it through the exact same 48-configuration factorial design [cite: 89, 192] to quantify the degradation of the amplitude amplification process under real hardware noise. 
+
+### 5. Advanced Error Mitigation Efficacy on Order-Finding Circuits
+* **The Gap:** Can Zero-Noise Extrapolation (ZNE) and Probabilistic Error Cancellation (PEC) overcome the hard fidelity ceiling imposed by 8-control-qubit circuits?
+* [cite_start]**Why it exists (Overlooked / Time Constraints):** The current experiments utilized only resilience level 1 (twirling-based readout mitigation) and DD [cite: 129, 196][cite_start], finding that twirling yielded minimal and inconsistent improvements[cite: 69]. [cite_start]ZNE and PEC require running circuits at artificially amplified noise levels [cite: 106] and demand heavy classical post-processing.
+* [cite_start]**Closest Paper:** *Progress Report 2* (lists extending the analysis to include ZNE and PEC as an immediate next step)[cite: 106].
+* [cite_start]**Methodology to Close It:** Integrate Qiskit Runtime's built-in ZNE and PEC primitives into the `run_hardware()` execution loop[cite: 94]. Utilizing local processing power, such as an M4 Pro chip, can expedite the classical computational overhead required for these techniques before submitting the jobs to IBM's cloud infrastructure. [cite_start]Measure if these techniques can lift the hardware success probability of the 8-control-qubit configurations above the near-random 0.023 baseline[cite: 53, 65].
+
+Would you like to drill down into the methodology for one of these specific gaps to begin mapping out your experimental code?
+
+
+
+
+
+
+
+
+
+
+
+
+Compare the research methodologies used across all papers.
+
+Group by: surveys, experiments, simulations, meta-analyses, case studies.
+
+Then flag:
+
+- Which methodology dominates this field and why?
+- Which methodology is underused?
+- Which paper's methodology is weakest and why?
+
+
+
+
+
+
+
+It is great to see how your research has evolved from theoretical exploration to rigorous empirical testing! Breaking down the methodologies across your three uploaded documents reveals a clear progression in your academic approach. 
+
+Here is the methodological breakdown of your uploaded papers, followed by an analysis of the landscape.
+
+### Methodology Grouping
+
+* [cite_start]**Experiments:** * *Progress Report 1* and *Progress Report 2* both utilize a full factorial experimental design[cite: 25, 143]. [cite_start]They execute 48 distinct quantum circuit configurations on real IBM Quantum hardware (specifically, the 156-qubit `ibm_marrakesh` processor) to gather empirical measurement distributions[cite: 23, 25, 29, 128].
+* [cite_start]**Simulations:** * *Progress Report 1* and *Progress Report 2* pair their hardware experiments with computational simulations to create a "three-tier execution framework"[cite: 23, 80, 178]. [cite_start]They use an "Ideal Simulation" (noiseless statevector) to establish a theoretical baseline and a "Noisy Simulation" (using device-calibrated error models) to predict hardware behavior[cite: 81, 82, 180, 182].
+* **Case Studies / Qualitative Analysis:** * *The Term Paper* relies on this methodology. [cite_start]It conducts a comparative analysis (a mini-case study) between IBM's Qiskit and Google's Cirq frameworks, evaluating their architectures and performance trade-offs based on existing literature[cite: 309, 318, 326, 334]. [cite_start]It also qualitatively analyzes the theoretical mechanics of Shor's and Grover's algorithms[cite: 348, 363].
+* **Surveys:** * None of the uploaded papers utilize surveys.
+* **Meta-analyses:** * None of the uploaded papers utilize formal statistical meta-analyses. 
+
+---
+
+### Methodology Analysis
+
+**Which methodology dominates this field and why?**
+The combination of **Simulation + Hardware Experimentation** completely dominates this specific niche of quantum computing research. 
+* [cite_start]**Why:** We are currently in the Noisy Intermediate-Scale Quantum (NISQ) era[cite: 13, 138]. [cite_start]The mathematical proofs for algorithms like Shor's are already flawlessly established in theory [cite: 136][cite_start]; the entire scientific frontier right now is measuring exactly how badly hardware noise degrades these algorithms in practice[cite: 139]. [cite_start]To prove anything meaningful today, researchers *must* use simulation to establish the perfect mathematical baseline, and then run an experiment on real hardware to quantify the "theory-practice gap"[cite: 84, 140]. Your Progress Reports capture this perfectly.
+
+**Which methodology is underused?**
+**Case Studies and Surveys** regarding real-world cryptographic migration. 
+* [cite_start]**Why:** While the physics and computer science communities are aggressively benchmarking hardware[cite: 141], there is a lack of qualitative data on how actual enterprise systems are preparing for the threat. [cite_start]Your term paper notes that organizations need to take proactive steps toward post-quantum cryptography[cite: 299], but a case study or survey actually measuring enterprise readiness or the logistical friction of migrating to these new standards is highly underrepresented in the broader technical literature.
+
+**Which paper's methodology is weakest and why?**
+**The Term Paper** has the weakest methodology in the context of a master's thesis.
+* [cite_start]**Why:** It is a descriptive literature review[cite: 264, 301]. [cite_start]While it provides excellent foundational context regarding the threat to RSA and symmetric-key systems[cite: 293, 295], it does not generate any novel empirical data, nor does it test a specific hypothesis. [cite_start]It relies on synthesizing existing knowledge (e.g., explaining how the Quantum Fourier Transform works [cite: 358]) rather than pushing the boundaries of what we know. [cite_start]By contrast, your Progress Reports rigorously manipulate variables (transpilation levels, control qubits, error mitigation) to generate entirely new insights about compiler-level circuit compression[cite: 25, 60]. 
+
+Would you like me to help you draft an updated "Methodology" chapter that seamlessly merges the theoretical framing from your Term Paper with the rigorous three-tier experimental design of your Progress Reports?
+
+
+
+
+
+

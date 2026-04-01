@@ -1,0 +1,7 @@
+.venv/
+.markdown-logs/
+__pycache__/
+.DS_Store
+apikey.json
+*.png
+bckp/*
