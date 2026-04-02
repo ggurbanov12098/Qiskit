@@ -10,18 +10,36 @@ Overleaf IEEE paper:
 
 ## Table of Contents
 
-1. [Overview](#overview)
-2. [Background](#background)
-3. [Benchmarking Framework](#benchmarking-framework)
-4. [Experiment Design](#experiment-design)
-5. [Metrics](#metrics)
-6. [Results Summary](#results-summary)
-7. [Cross-Algorithm Comparison](#cross-algorithm-comparison)
-8. [Project Structure](#project-structure)
-9. [How to Run](#how-to-run)
-10. [Dependencies](#dependencies)
-11. [Troubleshooting](#troubleshooting)
-12. [Additional Details & Deep Explanations](#additional-details--deep-explanations)
+1. [Claude Code Quickstart](#claude-code-quickstart)
+2. [Overview](#overview)
+3. [Background](#background)
+4. [Benchmarking Framework](#benchmarking-framework)
+5. [Experiment Design](#experiment-design)
+6. [Metrics](#metrics)
+7. [Results Summary](#results-summary)
+8. [Cross-Algorithm Comparison](#cross-algorithm-comparison)
+9. [Project Structure](#project-structure)
+10. [How to Run](#how-to-run)
+11. [Dependencies](#dependencies)
+12. [Troubleshooting](#troubleshooting)
+13. [Additional Details & Deep Explanations](#additional-details--deep-explanations)
+
+---
+
+## Claude Code Quickstart
+
+If you are using Claude Code CLI, project-level instructions are in `CLAUDE.md`.
+
+- Project memory and workflow guide: `CLAUDE.md`
+- Full thesis narrative and detailed analysis: this `README.md`
+
+Typical rebuild order:
+
+1. Run all cells in `Shor-Qiskit.ipynb`
+2. Run all cells in `Grover-Qiskit.ipynb`
+3. Run `python generate_thesis_plots.py`
+
+This produces/refreshes the generated artifacts under `results/`, `results/grover/`, and `results/thesis_plots/` (7 figures + 2 info-metric CSVs).
 
 ---
 
@@ -124,6 +142,26 @@ $$\text{amplification} = \frac{P(\text{marked state})}{1/2^n}$$
 
 Fold-improvement over random guessing. Any value > 1 confirms the search succeeded.
 
+### Information-Theoretic Metrics (computed from full distributions)
+
+| Metric | Formula | Interpretation |
+|--------|---------|----------------|
+| **Shannon Entropy** | $H = -\sum p_i \log_2 p_i$ | Distributional spread in bits |
+| **Entropy Efficiency** | $\eta = 1 - (H_{hw} - H_{ideal}) / (H_{max} - H_{ideal})$ | 0-to-1 noise resilience score (1 = ideal, 0 = uniform) |
+| **KL-Divergence** | $D_{KL} = \sum p_{ideal} \log(p_{ideal}/p_{hw})$ | Information lost from ideal to hardware |
+| **Participation Ratio** | $PR = 1 / \sum p_i^2$ | Effective number of occupied states |
+
+These metrics are computed by `generate_thesis_plots.py` from the JSON distributions and exported to `results/thesis_plots/shor_info_metrics.csv` and `grover_info_metrics.csv`.
+
+**Key results:**
+
+| Algorithm | Circuit Size | Entropy Efficiency ($\eta$) | KL-Div (bits) | Participation Ratio |
+|-----------|-------------|----------------------------|---------------|---------------------|
+| Shor | 4-ctrl (8q) | 0.451 | 0.506 | 6.9 (ideal: 4.0) |
+| Shor | 8-ctrl (12q) | 0.207 | 2.708 | 75.7 (ideal: 4.0) |
+| Grover | 2-qubit | 0.809 | 0.103 | 1.1 (ideal: 1.0) |
+| Grover | 4-qubit | 0.275 | 0.859 | 4.3 (ideal: 1.0) |
+
 ---
 
 ## Results Summary
@@ -196,6 +234,17 @@ The 4-qubit Grover circuit (173-231 two-qubit gates) is comparable in depth to S
 
 Grover shows **higher noise sensitivity** at equivalent depths because success depends on a single bitstring, while Shor aggregates probability mass across four phase peaks.
 
+### Fidelity Decay (Exponential Fit)
+
+Fitting $p_{success} = A \cdot e^{-\lambda \cdot n_{2q}}$ to hardware success vs. two-qubit gate count:
+
+| Algorithm | Decay Constant ($\lambda$) | Amplitude ($A$) | $R^2$ |
+|-----------|---------------------------|-----------------|-------|
+| **Shor** | 0.0058 $\pm$ 0.0007 | 2.00 | 0.79 |
+| **Grover** | 0.0048 $\pm$ 0.0002 | 0.93 | 0.95 |
+
+Per-gate decay rates are similar (same hardware), but Grover starts from a lower baseline and has zero tolerance for distributional broadening.
+
 ### Sweep Coverage Parity
 
 | Dimension | Shor | Grover |
@@ -212,24 +261,46 @@ Grover shows **higher noise sensitivity** at equivalent depths because success d
 ## Project Structure
 
 ```
-Qiskit-v1.1c/
-├── Shor-Qiskit.ipynb         # Shor benchmarking notebook (48 HW runs)
-├── Grover-Qiskit.ipynb       # Grover benchmarking notebook (48 HW runs)
-├── apikey.json               # IBM Quantum API token (auto-loaded)
-├── README.md                 # This file
+Qiskit/
+├── Shor-Qiskit.ipynb             # Shor benchmarking notebook (48 HW runs)
+├── Grover-Qiskit.ipynb           # Grover benchmarking notebook (48 HW runs)
+├── generate_thesis_plots.py      # Cross-algorithm figures + info-theoretic metrics
+├── Thesis_Results_Discussion.md  # IEEE Results & Discussion chapter draft
+├── apikey.json                   # IBM Quantum API token (auto-loaded)
+├── README.md                     # This file
+├── CLAUDE.md                     # Claude Code CLI project instructions
 │
-├── results/                  # Shor output
+├── results/                      # Shor output
 │   ├── results.csv
-│   ├── results.json
+│   ├── results.json              # Full probability distributions (all 3 tiers)
 │   ├── success_prob_and_tvd.png
-│   └── success_prob_bar.png
+│   ├── success_prob_bar.png
+│   └── thesis_plots/             # Cross-algorithm comparative figures (300 DPI)
+│       ├── noise_sensitivity_comparison.png   # Fig 1: Success prob vs depth
+│       ├── tvd_hardware_vs_noisy.png          # Fig 2: TVD across opt levels
+│       ├── degradation_bar_comparison.png     # Fig 3: Side-by-side degradation
+│       ├── distribution_fingerprints.png      # Fig 4: Ideal vs HW distributions
+│       ├── entropy_heatmap.png                # Fig 5: Entropy efficiency heatmap
+│       ├── dd_effectiveness.png               # Fig 6: DD delta by config
+│       ├── fidelity_decay.png                 # Fig 7: Exponential decay fit
+│       ├── shor_info_metrics.csv              # Entropy/KL/PR per Shor run
+│       └── grover_info_metrics.csv            # Entropy/KL/PR per Grover run
 │
-└── results/grover/           # Grover output
-    ├── grover_results.csv
-    ├── grover_results.json
-    ├── success_prob_and_tvd.png
-    ├── success_prob_bar.png
-    └── search_verification.png
+├── results/grover/               # Grover output
+│   ├── grover_results.csv
+│   ├── grover_results.json       # Full probability distributions (all 3 tiers)
+│   ├── success_prob_and_tvd.png
+│   ├── success_prob_bar.png
+│   └── search_verification.png
+│
+├── MT2_Report4/                  # Progress Report 4 (IEEE format)
+│   ├── MT2-Report4.tex
+│   ├── MT2-Report4.pdf
+│   └── IEEEtran.cls
+│
+├── bckp/                         # Notebook backups
+│
+└── gemini-chat-research-logs/    # Research context from Gemini sessions
 ```
 
 CSV columns `depth_2q`, `success_prob`, and `tvd_vs_ideal` are **directly comparable** across both result files.
@@ -297,6 +368,7 @@ Results save automatically. For cross-algorithm comparison, load both CSVs and c
 | `numpy` | any | Numerical operations |
 | `pandas` | any | Results DataFrames |
 | `matplotlib` | any | Plotting |
+| `scipy` | any | Exponential curve fitting (fidelity decay analysis) |
 | `pylatexenc` | any | LaTeX in circuit diagrams |
 | `jinja2` | any | Styled table rendering |
 
@@ -530,6 +602,19 @@ $\text{amplification} = P(\text{marked}) \;/\; (1/2^n)$. Ideal Grover approaches
 | `build_grover_circuit(num_qubits, marked_state)` | Full circuit: H &#8594; (Oracle + Diffusion) $\times k$ &#8594; measure |
 | `compute_grover_metrics(dist, ideal, noisy, num_qubits, marked)` | TVD variants + success prob + amplification |
 
+#### Cross-algorithm analysis (`generate_thesis_plots.py`)
+
+| Function | Purpose |
+|----------|---------|
+| `shannon_entropy(dist, num_bits)` | Shannon entropy H(p) in bits |
+| `kl_divergence(p_ideal, p_hw, num_bits)` | KL-divergence from ideal to hardware |
+| `participation_ratio(dist, num_bits)` | Effective number of occupied states |
+| `compute_info_metrics(dists, meta, ...)` | Compute all info-theoretic metrics for all runs |
+| `plot_distribution_fingerprints()` | Fig 4: Ideal vs hardware distributions at matched depths |
+| `plot_entropy_heatmap()` | Fig 5: Entropy efficiency heatmap (size x opt_level) |
+| `plot_dd_effectiveness()` | Fig 6: DD improvement delta by configuration |
+| `plot_fidelity_decay()` | Fig 7: Exponential fidelity decay with curve fitting |
+
 ---
 
 ### G. Extended Noise Sensitivity Analysis
@@ -541,6 +626,18 @@ $\text{amplification} = P(\text{marked}) \;/\; (1/2^n)$. Ideal Grover approaches
 | Degradation range | 5-15% | 1-47% |
 
 The 4-qubit Grover circuit (173-231 two-qubit gates) is comparable in depth to Shor's 4-control-qubit circuit (155-249). This overlap enables direct comparison: QFT-dominated circuits (Shor) exhibit gradual, predictable degradation, while oracle/diffusion-dominated circuits (Grover) degrade more sharply because the success criterion is a single bitstring rather than a distribution across multiple peaks.
+
+#### Information-Theoretic Quantification
+
+The participation ratio provides the most intuitive picture of noise impact:
+- **Shor 8-ctrl**: PR increases from 4.0 (ideal) to 75.7 (hardware) — noise dilutes the signal into ~19x more states than expected
+- **Grover 4-qubit**: PR increases from 1.0 to 4.3 — the marked state's mass spreads across ~4 competing states, destroying reliable search
+
+The entropy efficiency ($\eta$) heatmap (Fig. 5) reveals that optimization level and circuit size interact multiplicatively: the largest circuits at the lowest optimization levels reach $\eta < 0.20$, indicating the hardware output is nearly indistinguishable from uniform noise.
+
+#### The Error Correction Paradox
+
+Resilience level 1 (Pauli twirling + readout mitigation) sometimes *reduces* success probability relative to level 0. At $\eta < 0.30$, any correction overhead pushes the output further toward maximum entropy rather than recovering the ideal signal — consistent with findings by CSU ScholarWorks (2026) that applying QEC to Grover on NISQ devices can decrease accuracy.
 
 ---
 

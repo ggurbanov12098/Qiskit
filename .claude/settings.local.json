@@ -1,10 +1,14 @@
 {
-  "enabledMcpjsonServers": [
-    "qiskit-mcp",
-    "qiskit-docs",
-    "qiskit-ibm-runtime",
-    "qiskit-ibm-transpiler",
-    "qiskit-code-assistant",
-    "qiskit-gym"
-  ]
+  "permissions": {
+    "allow": [
+      "Read(//Library/Frameworks/Python.framework/Versions/3.13/bin/**)",
+      "Bash(/Users/destroy/Documents/GitHub/Qiskit/.venv/bin/pip list:*)",
+      "WebFetch(domain:github.com)"
+    ]
+  },
+  "enabledPlugins": {
+    "code-review@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "context7@claude-plugins-official": true
+  }
 }

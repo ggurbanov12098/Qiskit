@@ -1,7 +1,10 @@
+# Python virtual environment and caches
 .venv/
-.markdown-logs/
 __pycache__/
+.ipynb_checkpoints/
+
+# OS artifacts
 .DS_Store
-apikey.json
-*.png
-bckp/*
+
+# Local backup copies
+bckp/

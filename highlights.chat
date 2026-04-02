@@ -1,0 +1,67 @@
+Before I ask anything, do this: 
+- ﻿﻿﻿List every paper by author + year + core claim in one sentence if possible mark the ones that are available to read free, majorly focus on these but quality shouldn't be harmed)
+- ﻿﻿﻿Group them into clusters of shared assumptions 
+- ﻿﻿﻿Flag any paper that contradicts another 
+
+Map the landscape.
+
+
+Resources that might help for this answer:
+1. Error estimation in current noisy quantum computers (https://arxiv.org/html/2302.06870v3)
+2. A Novel Hybrid Quantum Framework for Assessing Noise Effects on Performance of Shor’s Algorithm (https://www.scirp.org/journal/paperinformation?paperid=146730)
+3. Refining Noise Mitigation in NISQ Hardware Through Qubit Error Probability (https://www.researchgate.net/publication/389821662_Refining_Noise_Mitigation_in_NISQ_Hardware_Through_Qubit_Error_Probability)
+4. Securing Cryptography in the Age of Quantum Computing and AI: Threats, Implementations, and Strategic Response (https://arxiv.org/html/2603.06969v1)
+
+
+
+
+
+
+### 🗺️ The Landscape Map: Quantum Cybersecurity & NISQ Benchmarking
+
+Here is a mapped landscape of the most relevant, recent literature to anchor your discussion on the theory-practice gap and the cryptographic threat timeline. I have prioritized high-quality, open-access papers that directly support your three-tier execution framework and your proposed Grover's experiment.
+
+#### Cluster 1: The NISQ Hardware Bottleneck (Benchmarking & Degradation)
+**Shared Assumption:** Current NISQ hardware noise and gate overhead fundamentally bottleneck the theoretical advantages of both Shor's and Grover's algorithms, making raw qubit count a deceptive metric.
+
+* **[Free] El Kaderi (2024):** Benchmarks Grover's algorithm directly on IBM NISQ platforms, proving that circuit topology and physical noise are the ultimate arbiters of experimental success.
+* **[Free] KTH Royal Institute of Technology (2025):** Simulates Grover's algorithm under IBM noise models, concluding that algorithmic performance degrades catastrophically as the search space scales, regardless of algorithm variance.
+* **[Free] CSU ScholarWorks (2026):** Demonstrates empirically that applying standard quantum error correction (like Shor's 9-qubit code) to Grover's algorithm on NISQ devices actually *decreases* accuracy due to the massive gate overhead.
+* **[Free] Unzalu et al. (2024):** Proposes a "total error probability" metric for algorithms like Grover's and Quantum Phase Estimation (QPE) on IBM platforms, offering a mathematical way to quantify the theory-practice gap without relying on classical noiseless simulation.
+
+#### Cluster 2: Bridging the Gap (Advanced Error Mitigation)
+**Shared Assumption:** Because true physical fault tolerance is currently out of reach, bridging the theory-practice gap requires hybrid classical-quantum mitigation techniques (like ZNE, PEC, and ML) deployed immediately post-transpilation.
+
+* **[Free] SCIRP Research (2026):** Introduces a hybrid quantum-classical framework specifically for Shor's modular exponentiation that significantly outperforms standard Zero-Noise Extrapolation (ZNE) in Qiskit simulations.
+* **[Free] Nunez et al. (2025):** Enhances ZNE by integrating a new metric called Qubit Error Probability (QEP), which scales better across complex circuits than traditional Qiskit error mitigation protocols.
+* **[Free] NSF/PAR Research (2026):** Utilizes machine learning as a pre-measurement error mitigation strategy to correctly classify the noisy, otherwise inconclusive outputs of basis-encoded algorithms like Grover's.
+
+#### Cluster 3: The Cryptographic Threat Timeline
+**Shared Assumption:** The security of RSA and AES is fundamentally tied to the rate at which hardware fidelity and error correction can catch up to algorithmic optimizations.
+
+* **[Free] ArXiv Quantum Threat Report (March 2026):** Argues that recent algorithmic optimizations (reducing RSA-2048 factorization from 20M to <1M physical qubits) and hardware milestones (like Google's Willow chip) have drastically accelerated the timeline for Q-Day.
+* **[Free] MITRE Corporation (Jan 2025):** Claims that by extrapolating current Quantum Volume growth rates, a quantum computer capable of breaking RSA-2048 remains roughly three decades away.
+* **Bervice (Feb 2026):** Argues that Grover's $O(\sqrt{N})$ speedup is practically nullified by the classical data-loading bottleneck (the oracle cost), while Shor's is currently crippled by logical qubit overhead.
+* **[Free] CyberSystem Journal (Jan 2026):** Provides a comprehensive theoretical review of how Shor's and Grover's algorithms force a global migration toward post-quantum cryptography despite the current limitations of NISQ computers.
+
+---
+
+### 🚩 Critical Contradictions Flagged
+
+**1. The "Q-Day" Timeline Collision (ArXiv 2026 vs. MITRE 2025)**
+* **The Conflict:** The MITRE paper asserts that breaking RSA-2048 is ~30 years away by linearly extrapolating current Quantum Volume metrics. Conversely, the March 2026 ArXiv synthesis completely shatters this timeline, citing late-2025 Google research that reduces the physical qubit requirement for RSA factorization by 95% (to under 1 million).
+* **Thesis Application:** This is an excellent tension point for your discussion chapter. You can frame your own empirical findings (where your 8-qubit control registers degraded to noise) as a localized proof of MITRE's skepticism regarding hardware readiness, while acknowledging that algorithmic breakthroughs (ArXiv 2026) are moving the goalposts faster than hardware alone.
+
+**2. The Error Correction Paradox (ScholarWorks 2026 vs. Standard Theory)**
+* **The Conflict:** Theoretical quantum literature generally assumes that applying error correction codes (like Shor's 9-qubit code) improves fidelity. The empirical ScholarWorks (2026) paper directly contradicts this in the NISQ era, proving that the extra gates required to *implement* the correction actually introduce more noise than they fix.
+* **Thesis Application:** When you run your fast Grover's experiment locally on your M4 Pro and compare it to the IBM hardware runs, this paradox justifies exactly why you are focusing on error *mitigation* (ZNE/PEC) rather than full error *correction* for the foreseeable future.
+
+---
+
+### 🗺️ Synthesizing the Landscape for Your Defense
+
+This literature maps flawlessly to the strategic advice you've been given for wrapping up your thesis:
+
+1.  **Literature Review:** Use Cluster 3 to set the stakes. Contrast the aggressive algorithmic threat timelines with the skeptical hardware reality.
+2.  **Methodology:** Anchor your 48-configuration sweep and three-tier framework using Cluster 1. It validates your approach of testing transpilation optimization and circuit depth against real hardware constraints.
+3.  **Discussion/Results:** When comparing how the Quantum Fourier Transform (Shor's) degrades versus the Oracle (Grover's), use the paradox from Cluster 2 and the ScholarWorks paper to explain the precision-noise trade-off. It provides academic backing for why your larger configurations failed.
