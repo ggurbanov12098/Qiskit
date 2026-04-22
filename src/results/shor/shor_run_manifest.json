@@ -1,0 +1,77 @@
+{
+  "profile": "AGGRESSIVE_FULL",
+  "run_hardware": true,
+  "rows_total": 227,
+  "rows_with_hardware": 227,
+  "rows_skipped": 0,
+  "backends": [
+    "ibm_marrakesh",
+    "ibm_kingston"
+  ],
+  "primary_backend": "ibm_marrakesh",
+  "backend_phase_policy": "primary_full_then_secondary_subset",
+  "secondary_phase_enabled": true,
+  "secondary_phase_executed": true,
+  "secondary_phase_reason": "started",
+  "secondary_phase_backends": [
+    "ibm_kingston"
+  ],
+  "secondary_phase_thresholds": {
+    "min_remaining_minutes": 60,
+    "min_remaining_jobs": 80
+  },
+  "secondary_subset": {
+    "control_sweep": [
+      6,
+      8,
+      10
+    ],
+    "shots_sweep": [
+      1024,
+      2048
+    ],
+    "repetitions": 1,
+    "opt_levels": [
+      1,
+      3
+    ],
+    "resilience_levels": [
+      0,
+      1
+    ],
+    "dd_sweep": [
+      false,
+      true
+    ]
+  },
+  "control_sweep": [
+    4,
+    6,
+    8,
+    10,
+    12
+  ],
+  "shots_sweep": [
+    512,
+    1024,
+    2048,
+    4096
+  ],
+  "repetitions": 3,
+  "opt_levels": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "resilience_levels": [
+    0,
+    1
+  ],
+  "dd_sweep": [
+    false,
+    true
+  ],
+  "zne_enabled": true,
+  "max_depth_2q_hardware": 700
+}
